@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="Gobang:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Gobang_jar</output-path>
+    <root id="root">
+      <element id="archive" name="Gobang.jar">
+        <element id="module-output" name="Gobang" />
+      </element>
+    </root>
+  </artifact>
+</component>
