@@ -8,7 +8,7 @@ public class Chess {
     //记录棋子属于哪一方
     private int[][] chessboard = new int[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
     //每个位置得分
-    private int[][] score = new int[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
+    public int[][] score = new int[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
 
     //初始化
     public void init(){

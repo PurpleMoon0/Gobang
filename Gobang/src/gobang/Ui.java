@@ -91,6 +91,13 @@ public class Ui {
             chessboard.addChessman(loc);
             chess.addChessman(loc.getX(), loc.getY(), loc.getOwner());
 
+            for(int i = 0; i<15; i++) {
+                for(int j = 0; j<15; j++) {
+                    System.out.print(chess.score[i][j] + " ");
+                }
+                System.out.print("\n");
+            }
+
             //判断机器是否胜利
             if(chess.isWin(loc.getX(), loc.getY(), -1)){
                 JOptionPane.showMessageDialog(frame, "机器获胜", "很遗憾，您输了！", JOptionPane.PLAIN_MESSAGE);
