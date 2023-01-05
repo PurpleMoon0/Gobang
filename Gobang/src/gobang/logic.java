@@ -3,10 +3,10 @@ package gobang;
 /**
  * 逻辑类
  */
-public class Chess {
+public class logic {
     public static final int CHESSBOARD_SIZE = 15;
     //记录棋子属于哪一方
-    private int[][] chessboard = new int[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
+    private int[][] ChessInformation = new int[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
     //每个位置得分
     private int[][] score = new int[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
     //测试：在控制台输出机器的算分结果
@@ -22,10 +22,10 @@ public class Chess {
     }
 
     //初始化
-    public void init(){
+    public void initialization(){
         for(int i = 0; i  < CHESSBOARD_SIZE; i++){
             for(int j = 0; j < CHESSBOARD_SIZE; j++){
-                chessboard[i][j] = 0;
+                ChessInformation[i][j] = 0;
                 score[i][j] = 0;
             }
         }
@@ -33,29 +33,29 @@ public class Chess {
     }
 
     //落子
-    public void addChessman(int x, int y, int owner){
-        chessboard[x][y] = owner;
+    public void addChess(int x, int y, int owner){
+        ChessInformation[x][y] = owner;
     }
 
-    //判断落子位置是否合法
-    public boolean isLegal(int x, int y){
-        if(x >=0 && x < CHESSBOARD_SIZE && y >= 0 && y < CHESSBOARD_SIZE && chessboard[x][y] == 0){
+    //判断落子位置是否合规
+    public boolean Compliance(int x, int y){
+        if(x >=0 && x < CHESSBOARD_SIZE && y >= 0 && y < CHESSBOARD_SIZE && ChessInformation[x][y] == 0){
             return true;
         }
         return false;
     }
 
-    //判断哪方赢了（必由刚落的子引发，因此只需判断刚落子的周围），owner为-1代表机器，owner为1代表人类
+    //判断输赢
     public boolean isWin(int x, int y, int owner){
         int sum = 0;
         //判断横向左边
         for(int i = x - 1; i >= 0; i--){
-            if(chessboard[i][y] == owner){sum++;}
+            if(ChessInformation[i][y] == owner){sum++;}
             else{break;}
         }
         //判断横向右边
         for(int i = x + 1; i < CHESSBOARD_SIZE; i++){
-            if(chessboard[i][y] == owner){sum++;}
+            if(ChessInformation[i][y] == owner){sum++;}
             else{break;}
         }
         if(sum >= 4) {return true;}
@@ -63,12 +63,12 @@ public class Chess {
         sum = 0;
         //判断纵向上边
         for(int i = y - 1; i >= 0; i--){
-            if(chessboard[x][i] == owner){sum++;}
+            if(ChessInformation[x][i] == owner){sum++;}
             else{break;}
         }
         //判断纵向下边
         for(int i = y + 1; i < CHESSBOARD_SIZE; i++){
-            if(chessboard[x][i] == owner){sum++;}
+            if(ChessInformation[x][i] == owner){sum++;}
             else{break;}
         }
         if(sum >= 4) {return true;}
@@ -76,12 +76,12 @@ public class Chess {
         sum = 0;
         //判断左上角到右下角方向上侧
         for(int i = x - 1, j = y - 1; i >= 0 && j >= 0; i--, j-- ){
-            if(chessboard[i][j] == owner){sum++;}
+            if(ChessInformation[i][j] == owner){sum++;}
             else{break;}
         }
         //判断左上角到右下角方向下侧
         for(int i = x + 1, j = y + 1; i < CHESSBOARD_SIZE && j < CHESSBOARD_SIZE; i++, j++ ){
-            if(chessboard[i][j] == owner){sum++;}
+            if(ChessInformation[i][j] == owner){sum++;}
             else{break;}
         }
         if(sum >= 4) {return true;}
@@ -89,12 +89,12 @@ public class Chess {
         sum = 0;
         //判断右上角到左下角方向上侧
         for(int i = x + 1, j = y - 1; i < CHESSBOARD_SIZE && j >= 0; i++, j-- ){
-            if(chessboard[i][j] == owner){sum++;}
+            if(ChessInformation[i][j] == owner){sum++;}
             else{break;}
         }
         //判断右上角到左下角方向下侧
         for(int i = x - 1, j = y + 1; i >= 0 && j < CHESSBOARD_SIZE; i--, j++ ){
-            if(chessboard[i][j] == owner){sum++;}
+            if(ChessInformation[i][j] == owner){sum++;}
             else{break;}
         }
         if(sum >= 4) {return true;}
@@ -108,7 +108,7 @@ public class Chess {
      * 算法思路：对15X15的572个五元组分别评分，一个五元组的得分就是该五元组为其中每个位置贡献的分数，
      * 一个位置的分数就是其所在所有五元组分数之和。所有空位置中分数最高的那个位置就是落子位置。
      */
-    public gobang.Location searchLocation(){
+    public ChessInformation searchLocation(){
         //每次都初始化下score评分数组
         for(int i = 0; i  < CHESSBOARD_SIZE; i++){
             for(int j = 0; j < CHESSBOARD_SIZE; j++){
@@ -116,8 +116,6 @@ public class Chess {
             }
         }
 
-        //每次机器找寻落子位置，评分都重新算一遍（虽然算了很多多余的，因为上次落子时候算的大多都没变）
-        //先定义一些变量
         int humanChessmanNum = 0;//五元组中的黑棋数量
         int machineChessmanNum = 0;//五元组中的白棋数量
         int tupleScoreTmp = 0;//五元组得分临时变量
@@ -133,8 +131,8 @@ public class Chess {
                 while(k < j + 5){
                     //chessboard[0][0]  chessboard[0][1]  chessboard[0][2]
                     //chessboard[0][1]  chessboard[0][2]  chessboard[0][3]
-                    if(chessboard[i][k] == -1) machineChessmanNum++;
-                    else if(chessboard[i][k] == 1)humanChessmanNum++;
+                    if(ChessInformation[i][k] == -1) machineChessmanNum++;
+                    else if(ChessInformation[i][k] == 1)humanChessmanNum++;
                     k++;
                 }
                 tupleScoreTmp = tupleScore(humanChessmanNum, machineChessmanNum);
@@ -145,7 +143,6 @@ public class Chess {
                 //置零
                 humanChessmanNum = 0;//五元组中的黑棋数量
                 machineChessmanNum = 0;//五元组中的白棋数量
-                tupleScoreTmp = 0;//五元组得分临时变量
             }
         }
 
@@ -154,8 +151,8 @@ public class Chess {
             for(int j = 0; j < 11; j++){
                 int k = j;
                 while(k < j + 5){
-                    if(chessboard[k][i] == -1) machineChessmanNum++;
-                    else if(chessboard[k][i] == 1)humanChessmanNum++;
+                    if(ChessInformation[k][i] == -1) machineChessmanNum++;
+                    else if(ChessInformation[k][i] == 1)humanChessmanNum++;
 
                     k++;
                 }
@@ -167,7 +164,6 @@ public class Chess {
                 //置零
                 humanChessmanNum = 0;//五元组中的黑棋数量
                 machineChessmanNum = 0;//五元组中的白棋数量
-                tupleScoreTmp = 0;//五元组得分临时变量
             }
         }
 
@@ -177,8 +173,8 @@ public class Chess {
                 int m = k; //x 14 13
                 int n = j; //y 0  1
                 while(m > k - 5 && k - 5 >= -1){//m = 4  k=4  4,0  3,1, 2,2  1,3  0,4
-                    if(chessboard[m][n] == -1) machineChessmanNum++;
-                    else if(chessboard[m][n] == 1)humanChessmanNum++;
+                    if(ChessInformation[m][n] == -1) machineChessmanNum++;
+                    else if(ChessInformation[m][n] == 1)humanChessmanNum++;
                     m--;
                     n++;
                 }
@@ -195,7 +191,6 @@ public class Chess {
                 //置零
                 humanChessmanNum = 0;//五元组中的黑棋数量
                 machineChessmanNum = 0;//五元组中的白棋数量
-                tupleScoreTmp = 0;//五元组得分临时变量
 
             }
         }
@@ -206,8 +201,8 @@ public class Chess {
                 int m = k;//y 1
                 int n = j;//x 14
                 while(m < k + 5 && k + 5 <= 15){
-                    if(chessboard[n][m] == -1) machineChessmanNum++;
-                    else if(chessboard[n][m] == 1)humanChessmanNum++;
+                    if(ChessInformation[n][m] == -1) machineChessmanNum++;
+                    else if(ChessInformation[n][m] == 1)humanChessmanNum++;
 
                     m++;
                     n--;
@@ -223,7 +218,6 @@ public class Chess {
                 //置零
                 humanChessmanNum = 0;//五元组中的黑棋数量
                 machineChessmanNum = 0;//五元组中的白棋数量
-                tupleScoreTmp = 0;//五元组得分临时变量
 
             }
         }
@@ -234,8 +228,8 @@ public class Chess {
                 int m = k;
                 int n = j;
                 while(m < k + 5 && k + 5 <= 15){
-                    if(chessboard[m][n] == -1) machineChessmanNum++;
-                    else if(chessboard[m][n] == 1)humanChessmanNum++;
+                    if(ChessInformation[m][n] == -1) machineChessmanNum++;
+                    else if(ChessInformation[m][n] == 1)humanChessmanNum++;
 
                     m++;
                     n++;
@@ -252,7 +246,6 @@ public class Chess {
                 //置零
                 humanChessmanNum = 0;//五元组中的黑棋数量
                 machineChessmanNum = 0;//五元组中的白棋数量
-                tupleScoreTmp = 0;//五元组得分临时变量
 
             }
         }
@@ -263,8 +256,8 @@ public class Chess {
                 int m = k;
                 int n = j;
                 while(m < k + 5 && k + 5 <= 15){
-                    if(chessboard[n][m] == -1) machineChessmanNum++;
-                    else if(chessboard[n][m] == 1)humanChessmanNum++;
+                    if(ChessInformation[n][m] == -1) machineChessmanNum++;
+                    else if(ChessInformation[n][m] == 1)humanChessmanNum++;
 
                     m++;
                     n++;
@@ -281,7 +274,6 @@ public class Chess {
                 //置零
                 humanChessmanNum = 0;//五元组中的黑棋数量
                 machineChessmanNum = 0;//五元组中的白棋数量
-                tupleScoreTmp = 0;//五元组得分临时变量
 
             }
         }
@@ -289,7 +281,7 @@ public class Chess {
         //从空位置中找到得分最大的位置
         for(int i = 0; i < 15; i++){
             for(int j = 0; j < 15; j++){
-                if(chessboard[i][j] == 0 && score[i][j] > maxScore){
+                if(ChessInformation[i][j] == 0 && score[i][j] > maxScore){
                     goalX = i;
                     goalY = j;
                     maxScore = score[i][j];
@@ -298,11 +290,11 @@ public class Chess {
         }
 
         if(goalX != -1 && goalY != -1){
-            return new gobang.Location(goalX, goalY, -1);
+            return new ChessInformation(goalX, goalY, -1);
         }
 
-        //没找到坐标说明平局了，笔者不处理平局
-        return new gobang.Location(-1, -1, -1);
+        //没找到坐标说明平局了
+        return new ChessInformation(-1, -1, -1);
     }
 
     //各种五元组情况评分表
@@ -347,10 +339,8 @@ public class Chess {
         if(humanChessmanNum == 4){
             return 100000;
         }
-        return -1;//若是其他结果肯定出错了。这行代码根本不可能执行
+        return -1;
     }
-
-
 
 }
 
