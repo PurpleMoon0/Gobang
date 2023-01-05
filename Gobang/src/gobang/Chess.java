@@ -8,7 +8,18 @@ public class Chess {
     //记录棋子属于哪一方
     private int[][] chessboard = new int[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
     //每个位置得分
-    public int[][] score = new int[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
+    private int[][] score = new int[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
+    //测试：在控制台输出机器的算分结果
+    private int a = 1;
+    public void showScore(){
+        System.out.println("第"+ a +"次落子");a++;
+        for(int i = 0; i<15; i++) {
+            for(int j = 0; j<15; j++) {
+                System.out.printf("%-8d", score[i][j]);
+            }
+            System.out.print("\n");
+        }
+    }
 
     //初始化
     public void init(){
@@ -18,6 +29,7 @@ public class Chess {
                 score[i][j] = 0;
             }
         }
+        a = 1;
     }
 
     //落子
